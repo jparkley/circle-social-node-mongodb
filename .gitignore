@@ -1,0 +1,6 @@
+# Always-ignore 
+*.log
+node_modules/
+docs/
+.tmp/
+*.err
