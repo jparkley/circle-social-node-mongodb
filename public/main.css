@@ -381,6 +381,10 @@ textarea.tall-textarea {
   font-family: 'Kirang Haerang', cursive;
   font-size: 3rem;
 }
+.logo--small {
+  font-size: 2rem;  
+}
+
 a:hover {
   text-decoration: none;
 }
