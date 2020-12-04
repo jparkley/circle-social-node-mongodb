@@ -4,3 +4,6 @@ node_modules/
 docs/
 .tmp/
 *.err
+
+# Credentials
+.env

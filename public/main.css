@@ -382,9 +382,10 @@ textarea.tall-textarea {
   font-size: 3rem;
 }
 .logo--small {
-  font-size: 2rem;  
+  font-size: 2rem;
 }
 
 a:hover {
+  color:#F5B041;
   text-decoration: none;
 }
