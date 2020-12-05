@@ -1,4 +1,5 @@
-const usersCollection = require('../db').collection("users");
+const bcrypt = require('bcryptjs'); // For hashing password
+const usersCollection = require('../db').db().collection("users");
 const validator = require('validator');
 
 let User = function(data) {
@@ -27,28 +28,26 @@ User.prototype.cleanUp = function() {
 
 User.prototype.validate = function() {
   if (this.data.username == '') { this.errors.push("You must provide a username.");}
-
   if (this.data.username != '' && !validator.isAlphanumeric(this.data.username)) {
     this.errors.push("Username can only contain letters and numbers.")
   }
-
   if (!validator.isEmail(this.data.email)) {
     this.errors.push("You must provide a valid email address.")
   }
   if (this.data.password == '') {this.errors.push("You must provide a password.");}
 
   if (this.data.username.length > 0 && this.data.username.length < 3) {
-    this.errors.push("The password must be at least 3 characters.")
+    this.errors.push("The username must be at least 3 characters.")
   }
-  if (this.data.password.length > 30) {
-    this.errors.push("The password cannot exceed 30 characters.");
+  if (this.data.email.length > 50) {
+    this.errors.push("The email cannot exceed 30 characters.");
   }
 
   if (this.data.password.length > 0 && this.data.password.length < 7) {
     this.errors.push("The password must be at least 7 characters.")
   }
-  if (this.data.password.length > 50) {
-    this.errors.push("The password cannot exceed 50 characters.");
+  if (this.data.password.length > 30) {
+    this.errors.push("The password cannot exceed 30 characters.");
   }
 }
 
@@ -56,11 +55,45 @@ User.prototype.validate = function() {
 User.prototype.register = function() {
   this.cleanUp();
   this.validate();
+  //console.log(this.data);
 
-  console.log(this.data);
   if (!this.errors.length) {
+    let salt = bcrypt.genSaltSync(10);
+    this.data.password = bcrypt.hashSync(this.data.password, salt)
     usersCollection.insertOne(this.data);
   }
 }
 
+
+User.prototype.login = function() {
+  return new Promise((resolve, reject) => {
+    this.data.email = '';
+    this.cleanUp();
+
+    usersCollection.findOne({username: this.data.username}).then(attemptedUser => {
+      if (attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)) {
+        resolve("Logged in");
+      } else {
+        reject("Invalid");
+      }
+    }).catch(function(err) {
+        reject("Please try again later.")
+    });
+  });
+}
+
 module.exports = User;
+
+
+// traditional callback process for login
+// return new Promise((resolve, reject) => {
+//   this.data.email = '';
+//   this.cleanUp();
+//   usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
+//     if (attemptedUser && attemptedUser.password == this.data.password) {
+//       resolve("Congrats");
+//     } else {
+//       reject("Invalid");
+//     }
+//   });
+// })
