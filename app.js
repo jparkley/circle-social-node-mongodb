@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const flash = require('connect-flash');
 const app = express();
 
 let sessionWithOptions = session({
@@ -12,6 +13,7 @@ let sessionWithOptions = session({
 });
 
 app.use(sessionWithOptions);
+app.use(flash());
 
 const router = require('./router');
 
@@ -26,7 +28,6 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.use('/', router);
-
 
 //app.listen(3000);
 module.exports = app; // exports to db.js

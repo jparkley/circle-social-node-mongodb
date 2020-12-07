@@ -389,3 +389,11 @@ a:hover {
   color:#F5B041;
   text-decoration: none;
 }
+
+.login-alert {
+  color: #CD6155;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: block;
+  text-align: right;
+}
