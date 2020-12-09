@@ -15,6 +15,12 @@ let sessionWithOptions = session({
 app.use(sessionWithOptions);
 app.use(flash());
 
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user; // With this, user info is available within EJS templates  
+  res.locals.errors = req.flash('errors');
+  next();
+});
+
 const router = require('./router');
 
 /* Add user submitted data to the request object (from HTTP form & JSON data) */
