@@ -12,5 +12,12 @@ router.post('/logout', userController.logout);
 router.get('/create-post', userController.mustBeLoggedIn, postController.displayForm);
 router.post('/create-post', userController.mustBeLoggedIn, postController.saveForm);
 router.get('/post/:id', postController.displaySinglePost);
+router.get('/post/:id/edit', userController.mustBeLoggedIn, postController.displayEditForm);
+router.post('/post/:id/edit', userController.mustBeLoggedIn, postController.updateForm);
+router.post('/post/:id/delete', userController.mustBeLoggedIn, postController.deleteForm);
+
+// Profile related routes
+router.get('/profile/:username', userController.ifUserExists, userController.displayProfileHome);
+
 
 module.exports = router;

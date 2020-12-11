@@ -1,0 +1,11 @@
+<% if (errors) { errors.forEach(function(error) { %>
+<div class="container flex-md-row p-2 alert-failure mb-5">
+  <%=error%>
+</div>
+<% })} %>
+
+<% if (success) { success.forEach(function(singleSuccess) { %>
+<div class="container flex-md-row p-2 alert-success mb-5">
+  <%=singleSuccess%>
+</div>
+<% })} %>

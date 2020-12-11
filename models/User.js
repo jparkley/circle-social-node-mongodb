@@ -6,7 +6,6 @@ const md5 = require('md5'); // For gravatar
 let User = function(data, getAvatar) {
   this.data = data;
   this.errors = [];
-  console.log('in user.js ', this.data.email);
   if (getAvatar == undefined) { getAvatar = false};
   if (getAvatar) {this.getAvatar()}
 }
@@ -68,7 +67,6 @@ User.prototype.validate = function() {
   });
 }
 
-
 User.prototype.register = function() {
   return new Promise(async (resolve, reject) => {
     this.cleanUp();
@@ -86,7 +84,6 @@ User.prototype.register = function() {
   });
 }
 
-
 User.prototype.login = function() {
   return new Promise((resolve, reject) => {
     this.data.email = '';
@@ -97,6 +94,7 @@ User.prototype.login = function() {
         resolve("Logged in");
         this.data = attemptedUser;
         this.getAvatar();
+        resolve('Congrats');
       } else {
         reject("Invalid Username and/or Password.");
       }
@@ -106,10 +104,35 @@ User.prototype.login = function() {
   });
 }
 
-
 User.prototype.getAvatar = function() {
     this.avatar = `https://s.gravatar.com/avatar/${md5(this.data.email)}?s=128`;
     //console.log(this.avatar);
+}
+
+User.findByUsername = function(username) {
+  return new Promise(function(resolve, reject) {
+    if (typeof(username) != 'string') {
+      reject();
+      return;
+    }
+
+    usersCollection.findOne({username: username}).then(function(user) {
+      if (user) {
+        user = new User(user, true); // 'true' is to getAvatar
+        // Cleaning up
+        user = {
+          _id: user.data._id,
+          username: user.data.username,
+          avatar: user.avatar
+        }
+        resolve(user);
+      } else {
+        reject();
+      }
+    }).catch(function() {
+      reject();
+    });
+  });
 }
 
 module.exports = User;
