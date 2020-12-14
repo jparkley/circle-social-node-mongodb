@@ -100,6 +100,7 @@ Post.reusableFindById = function(uniqueOperations, visitorId) {
 
     posts = posts.map(function(post) {
       post.isVisitorOwner = post.authorId.equals(visitorId);
+      post.authorId = undefined; // Not to send authorId to the browser (security matter)
       post.author = {
         username: post.author.username,
         avatar: new User(post.author, true).avatar
@@ -153,5 +154,20 @@ Post.deleteForm = function(postIdToDelete, currentUserId) {
   });
 }
 
+Post.search = function(searchTerm) {
+  return new Promise(async (resolve, reject) => {
+    // Validation
+    if (typeof(searchTerm) == 'string') {
+      let posts = await Post.reusableFindById([
+        {$match: {$text: {$search: searchTerm}}}, // MongoDB text search: not complete search, but search on text
+        {$sort: {score: {$meta: "textScore"}}}
+      ]);
+      resolve(posts);
+    } else {
+      reject();
+    }
+
+  });
+}
 
 module.exports = Post;

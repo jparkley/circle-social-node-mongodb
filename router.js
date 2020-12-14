@@ -15,9 +15,11 @@ router.get('/post/:id', postController.displaySinglePost);
 router.get('/post/:id/edit', userController.mustBeLoggedIn, postController.displayEditForm);
 router.post('/post/:id/edit', userController.mustBeLoggedIn, postController.updateForm);
 router.post('/post/:id/delete', userController.mustBeLoggedIn, postController.deleteForm);
+router.post('/search', postController.search);
 
 // Profile related routes
 router.get('/profile/:username', userController.ifUserExists, userController.displayProfileHome);
+
 
 
 module.exports = router;
