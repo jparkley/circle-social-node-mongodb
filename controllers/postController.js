@@ -72,3 +72,11 @@ exports.deleteForm = function(req, res) {
     req.session.save(() => res.redirect('/'));
   });
 }
+
+exports.search = function(req, res) {
+  Post.search(req.body.searchTerm).then(posts => {
+    res.json(posts)
+  }).catch(() => {
+    res.json([])
+  });
+}
