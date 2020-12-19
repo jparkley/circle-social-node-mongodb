@@ -6,9 +6,10 @@ exports.sharedProfileData = async function(req, res, next) {
   let isVisitorProfile = false;
   let isFollowing = false;
   if (req.session.user) { // Check if this visitor is logged in
-    console.log("profile userid: " , req.profileUser._id);
-    console.log("visitorid: ", req.visitorId);
-    isVisitorProfile = req.profileUser._id.equals(req.visitorId);
+    // console.log("profile userid: " , req.profileUser._id);
+    // console.log("visitorid: ", req.visitorId);
+    //isVisitorProfile = req.profileUser._id.equals(req.visitorId); <- hj
+    isVisitorProfile = req.profileUser._id.equals(req.session.user._id); // <- original
     isFollowing = await Follow.isVisitorFollowing(req.profileUser._id, req.visitorId)
   }
   req.isVisitorProfile = isVisitorProfile;
@@ -106,6 +107,7 @@ exports.ifUserExists = function(req, res, next) {
 exports.displayProfileHome = function(req, res) {
   Post.findByAuthorId(req.profileUser._id).then(function(posts) {
     res.render('profile', {
+      title: `Profile for ${req.profileUser.username}`,
       currentPage: "posts",
       posts: posts,
       profileUsername: req.profileUser.username,

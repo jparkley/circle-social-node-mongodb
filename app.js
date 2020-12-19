@@ -48,5 +48,35 @@ app.use(express.static('public'));
 
 app.use('/', router);
 
+//*** Create a server that is going to use our Express app as its handler (20201218)
+const server = require('http').createServer(app)
+
+//*** Add socket functionality to the server
+const io = require('socket.io')(server)
+
+io.use(function(socket, next) { // This function will run anytime there is a new transfer of data
+  sessionWithOptions(socket.request, socket.request.res, next) // Express session data will be available within the context of socket.io
+})
+
+// Listen "on" the connection
+io.on('connection', function(socket) {
+  // Acknowledge a chat msg being sent from a browser is if it's coming from a browser with looged in user session data
+  if (socket.request.session.user) {
+    let user = socket.request.session.user
+    socket.emit('welcome', {username: user.username, avatar: user.avatar})
+    //socket.on ('event type', function that will run in response)
+    socket.on('chatMessageFromBrowser', function (data) {
+      // io.emit : to everyone
+      // socket.broadcast.emit: to everyone except the one who sent the msg
+      socket.broadcast.emit('chatMessageFromServer', {
+        message: sanitizeHTML(data.message, {allowedTags:[], allowedAttributes: {}}),
+        username: user.username,
+        avatar: user.avatar})
+    })
+
+  }
+})
+
 //app.listen(3000);
-module.exports = app; // exports to db.js
+//module.exports = app; // exports to db.js
+module.exports = server; // exports to db.js
