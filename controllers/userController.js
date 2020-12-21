@@ -109,8 +109,8 @@ exports.apiLogin = function(req, res) {
 
 exports.apiMustBeLoggedIn = function(req, res, next) {
   try {
-    console.log('env: ', process.env.JWTSECRET);
-    console.log('token: ', req.body.token);
+    //console.log('env: ', process.env.JWTSECRET);
+    //console.log('token: ', req.body.token);
     req.apiUser = jwt.verify(req.body.token, process.env.JWTSECRET)
     next()
   } catch(errors) {

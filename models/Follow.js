@@ -4,7 +4,7 @@ const ObjectID = require('mongodb').ObjectID;
 const User = require('./User');
 
 let Follow = function(followedUsername, authorId) {
-  console.log("followed username in param: ", followedUsername);
+  //console.log("followed username in param: ", followedUsername);
   this.followedUsername = followedUsername;
   this.authorId = authorId;
   this.errors = [];

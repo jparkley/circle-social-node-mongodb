@@ -99,7 +99,7 @@ export default class RegistrationForm {
   }
 
   showValidationError(el, msg) {
-    console.log('show error', msg);
+    //console.log('show error', msg);
     el.nextElementSibling.innerHTML = msg
     el.nextElementSibling.classList.add('liveValidateMessage--visible')
     el.errors = true
