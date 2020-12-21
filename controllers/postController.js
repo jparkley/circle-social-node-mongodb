@@ -4,6 +4,7 @@ exports.displayForm = function(req, res) {
   res.render('create-post');
 }
 
+//*** create a new post
 exports.saveForm = function(req, res) {
   let post = new Post(req.body, req.session.user._id);
   post.saveForm().then(function(newId) {
@@ -12,6 +13,15 @@ exports.saveForm = function(req, res) {
 
   }).catch(function(errors) {
     req.session.save(() => res.redirect('/create-post'))
+  });
+}
+
+exports.apiCreate = function(req, res) {
+  let post = new Post(req.body, req.apiUser._id);
+  post.saveForm().then(function(newId) {
+    res.json("congrats")
+  }).catch(function(errors) {
+    res.json(errors)
   });
 }
 
@@ -70,6 +80,15 @@ exports.deleteForm = function(req, res) {
   }).catch((err) => {
     req.flash("errors", "You do not have permission to perform that action.");
     req.session.save(() => res.redirect('/'));
+  });
+}
+
+exports.apiDelete = function(req, res) {
+  //console.log("visitor id: ", req.visitorId);
+  Post.deleteForm(req.params.id, req.apiUser._id).then(() => {
+    res.json("Success")
+  }).catch((err) => {
+    res.json("You do not have permission to perform that action.")
   });
 }
 
