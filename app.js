@@ -7,6 +7,12 @@ const csrf = require('csurf')
 const app = express();
 const sanitizeHTML = require('sanitize-html');
 
+//*** For API rounds
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.use('/api', require('./router-api'))
+
+
 let sessionWithOptions = session({
   secret: "charter school for enriched studies",
   store: new MongoStore({client: require('./db')}),
