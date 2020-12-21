@@ -3,6 +3,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const markdown = require('marked');
+const csrf = require('csurf')
 const app = express();
 const sanitizeHTML = require('sanitize-html');
 
@@ -46,7 +47,28 @@ app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
+// Set to use a CSRF token for post,delete,put or any requests that modify state
+app.use(csrf())
+
+app.use(function(req, res, next) {
+  //*** res.locals.csrfToken: this will contain the tocken value to output into the HTML templates
+  //*** req.carfToken: this function (from the package) will generate a token
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
+
 app.use('/', router);
+
+app.use(function(err, req, res, next) {
+  if (err) {
+    if (err.code == "EBADCSRFTOKEN") {
+        req.flash('errors', "Cross site request forgery detected." );
+        req.session.save(() => res.redirect('/'))
+    } else {
+      res.render("404")
+    }
+  }
+})
 
 //*** Create a server that is going to use our Express app as its handler (20201218)
 const server = require('http').createServer(app)

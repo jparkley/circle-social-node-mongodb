@@ -30,8 +30,8 @@ Follow.prototype.validate = async function(action) {
   if (action == 'remove') {
     if (!followAlreadyExist) { this.errors.push('You cannot stop following someone you do not already follow.')}
   }
-  console.log("this.followedid: ", this.followedId);
-  console.log("this.authorid: ", this.authorId);
+  //console.log("this.followedid: ", this.followedId);
+  //console.log("this.authorid: ", this.authorId);
   if (this.followedId.equals(this.authorId)) { this.errors.push('You cannot follow yourself.')}
   console.log(this.errors);
 }
