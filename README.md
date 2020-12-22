@@ -1,6 +1,6 @@
 
 
-# Social App - Circle (Friendship Couch): 
+# Social App - Circle (Friendship Couch) 
 - App where you can share fresh ideas or interesting information.  
 - You can create an account to post and follow / unfollow your friends.
 - Live chat & live search
