@@ -4,8 +4,9 @@
 - App where you can share fresh ideas or interesting information.  
 - You can create an account to post and follow / unfollow your friends.
 - Live chat & live search
-- Test: kitty-meowmeow
+- Test: johndoe - 1ox2tigers!
 
+Live site (with React front-end) is available at [dobooro-circle.netlify.app](https://dobooro-circle.netlify.app/)
 
 ## Key Features
 
